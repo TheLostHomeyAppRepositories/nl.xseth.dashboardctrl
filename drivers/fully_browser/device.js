@@ -1,91 +1,146 @@
 'use strict';
 
+const url = require('url');
 const Homey = require('homey');
-const util = require('/lib/util.js');
 
-class IpwebcamDevice extends Homey.Device {
+class FullyBrowserDevice extends Homey.Device {
 
   onInit() {
 
-    var interval = this.getSetting('polling') || 5;
-    this.pollDevice(interval);
+    const api = new URL(this.getSettings('address'));
+    api.searchParams.set('type', 'json');
+    api.searchParams.set('password', this.getSetting('password'));
+    this.API = api;
 
-    // LIVE SNAPSHOT TOKEN
-    this.ipwebcamSnapshot = new Homey.Image();
-    this.ipwebcamSnapshot.setStream(async (stream) => {
-      const res = await util.getStreamSnapshot('http://'+ this.getSetting('address') +':'+ this.getSetting('port') +'/shot.jpg', this.getSetting('username'), this.getSetting('password'));
+    // Setup polling of device
+    this.polling = setInterval(poll, 1000 * this.getSettings('polling');
+
+    // Register image from CamSnapshot
+    this.setupImage();
+
+    // Register capabilities
+    this.registerCapabilityListener('onoff', this.turnOnOff);
+  }
+
+  onDeleted() {
+    clearInterval(this.polling);
+    clearInterval(this.pinning);
+  }
+
+  function getAPIUrl(cmd) {
+    /**
+     * Get URL of API as URL object
+     *
+     * @param {String} cmd - Command to use in API
+     * @return {URL} URL of API for specific cmd
+     */
+    const URL = Object.assign({}, this.API);
+    URL.searchParams.set('cmd', cmd);
+
+    return URL;
+  }
+
+  function setupImage() {
+    /** 
+     * Register snapshot image from FullyBrowser
+     */
+
+    this.snapshot = new Homey.Image();
+
+    this.snapshot.setStream(async (stream) => {
+      this.API.searchParams.set('cmd', 'getCamshot'); // Generate API URL
+      const res = await util.getStreamSnapshot(this.API.toString());
       if(!res.ok)
         throw new Error('Invalid Response');
 
       return res.body.pipe(stream);
     });
 
-    this.ipwebcamSnapshot.register()
+    this.snapshot.register()
       .then(() => {
-        return this.setCameraImage('ipwebcam', Homey.__('Live Snapshot'), this.ipwebcamSnapshot);
+        return this.setCameraImage('fully_browser', Homey.__('Live CamSnapshot'), this.snapshot);
       })
-      .catch(this.error.bind(this, 'ipwebcamSnapshot.register'));
+      .catch(this.error.bind(this, 'snapshot.register'));
   }
 
-  onDeleted() {
-    clearInterval(this.pollingInterval);
+  function poll() {
+    /**
+     * Poll for device current status
+     */
+
+    this.getStatus()
+    .then(stats => {
+      this.log(stats)
+      
+    })
+    .catch(error => {
+      switch (error) {
+        case 'err_sensor_motion':
+        case 'err_sensor_battery':
+          this.setUnavailable(Homey.__(error));
+          break;
+        default:
+          this.setUnavailable(Homey.__('Unreachable'));
+          break;
+      }
+      this.ping();
+    });
   }
 
-  // HELPER FUNCTIONS
-  pollDevice(interval) {
-    clearInterval(this.pollingInterval);
-    clearInterval(this.pingInterval);
+  function ping() {
+    /**
+     * Ping the device to verify availability
+     */
 
-    this.pollingInterval = setInterval(() => {
-      util.getIpwebcam(this.getSetting('address'), this.getSetting('port'), this.getSetting('username'), this.getSetting('password'))
-        .then(result => {
-          if (this.getCapabilityValue('measure_battery') != result.battery) {
-            this.setCapabilityValue('measure_battery', result.battery);
-          }
-          if (this.getCapabilityValue('alarm_motion') != result.motionalarm) {
-            this.setCapabilityValue('alarm_motion', result.motionalarm);
-          }
-          if (this.getCapabilityValue('alarm_generic') != result.soundalarm) {
-            this.setCapabilityValue('alarm_generic', result.soundalarm);
-          }
-          if (this.getCapabilityValue('measure_luminance') != result.lux) {
-            this.setCapabilityValue('measure_luminance', result.lux);
-          }
-        })
-        .catch(error => {
-    		  switch (error) {
-		        case 'err_sensor_motion':
-			      case 'err_sensor_sound':
-			      case 'err_sensor_light':
-			      case 'err_sensor_battery':
-              this.setUnavailable(Homey.__(error));
-			        break;
-		        default:
-              this.setUnavailable(Homey.__('Unreachable'));
-			        break;
-		      }
-          this.pingDevice();
-        })
-    }, 1000 * interval);
-  }
+    clearInterval(this.polling);
+    clearInterval(this.pinging);
 
-  pingDevice() {
-    clearInterval(this.pollingInterval);
-    clearInterval(this.pingInterval);
-
-    this.pingInterval = setInterval(() => {
-      util.getIpwebcam(this.getSetting('address'), this.getSetting('port'), this.getSetting('username'), this.getSetting('password'))
-        .then(result => {
-          this.setAvailable();
-          var interval = this.getSetting('polling') || 5;
-          this.pollDevice(interval);
-        })
-        .catch(error => {
-          this.log('Device is not reachable, pinging every 63 seconds to see if it comes online again.');
-        })
+    this.pinging = setInterval(() => {
+      this.getStatus()
+      .then(result => {
+        this.setAvailable();
+        clearInterval(this.pinging);
+        this.polling = setInterval(pollDevice, 1000 * this.getSettings('polling');
+      })
+      .catch(error => {
+        this.log('Device is not reachable, pinging every 63 seconds to see if it comes online again.');
+      })
     }, 63000);
   }
 
+  async function getStatus() {
+    /**
+     * Get the deviceInfo (Status) of Fully Browser
+     *
+     * @return {Object} Current status of Fully Browser
+     */
+
+      const url = getAPIUrl('deviceInfo');
+
+      fetch(url.toString())
+      .then(utils.checkStatus)
+      .then(res => return(res.json())
+      .catch(err => {
+        throw new Error(err);
+      });
+    });
+  }
+
+  async function turnOnOff(value) {
+    /**
+     * Turn Fully Browser on or off
+     *
+     * @param {Boolean} value - to turn on or off
+     */
+    const onoff = value ? 'screenOn' : 'screenOff'
+    const url = getAPIUrl(onoff);
+
+    fetch(url.toString())
+    .then(utils.checkStatus)
+    .catch(err => {
+      return reject(err);
+    });
+  }
 }
 
-module.exports = IpwebcamDevice;
+module.exports = FullyBrowserDevice;
