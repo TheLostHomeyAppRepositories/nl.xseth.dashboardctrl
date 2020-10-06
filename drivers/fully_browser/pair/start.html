@@ -10,16 +10,12 @@ $(function() {
     $('.ipwebcam-info').hide();
 
 		var inputaddress = $('#address').val();
-    var inputport = Number($('#port').val());
-		var inputusername = $('#username').val();
     var inputpassword = $('#password').val();
     var inputpolling = Number($('#polling').val());
 
     if( inputaddress != '' && inputpolling != '') {
       var device_data = {
         address  : inputaddress,
-        port   : inputport,
-        username : inputusername,
   			password : inputpassword
       };
 
@@ -72,14 +68,12 @@ $(function() {
 
       var settings = {
         address  : inputaddress,
-        port   : inputport,
-        username : inputusername,
   			password : inputpassword,
         polling  : inputpolling
       };
 
       Homey.addDevice({
-        name	: 'IP Webcam',
+        name	: 'Fully Browser',
         data 	: device_data,
         settings: settings
       }, function(error, result) {
@@ -144,14 +138,6 @@ $(function() {
   <div class="form-group">
     <label for="address" data-i18n="pair.address">IP address</label>
     <input type="text" class="form-control" id="address" placeholder="0.0.0.0" required>
-  </div>
-  <div class="form-group">
-  	<label for="port" data-i18n="pair.port">Port</label>
-  	<input type="number" class="form-control" id="port" placeholder="8080" value="8080" required>
-  </div>
-  <div class="form-group">
-  	<label for="username" data-i18n="pair.username">Username</label>
-  	<input type="text" class="form-control" id="username">
   </div>
   <div class="form-group">
   	<label for="password" data-i18n="pair.password">Password</label>

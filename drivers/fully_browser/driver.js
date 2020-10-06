@@ -3,20 +3,23 @@
 const Homey = require('homey');
 const util = require('/lib/util.js');
 
-class IpwebcamDriver extends Homey.Driver {
+class FullyBrowserDriver extends Homey.Driver {
 
   onPair(socket) {
     socket.on('testConnection', function(data, callback) {
-      util.getBufferSnapshot('http://'+ data.address +':'+ data.port +'/shot.jpg', data.username, data.password)
-        .then(image => {
-          callback(false, image.toString('base64'));
-        })
-        .catch(error => {
+      (async () => {
+        const res = await fetch(data.address + '/?cmd=deviceInfo&type=json&password=' + data.password)
+
+        if (res.ok) {
+          callback(false, res.json());
+        } else {
+          callback(true, 'Error');
+        }
+      }).catch(error => {
           callback(error, null);
-        })
+      });
     });
   }
-
 }
 
-module.exports = IpwebcamDriver;
+module.exports = FullyBrowserDriver;
