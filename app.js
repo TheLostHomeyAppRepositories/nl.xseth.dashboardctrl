@@ -9,7 +9,7 @@ class DashboardCtrlApp extends Homey.App {
 
     new Homey.FlowCardAction('dashboard')
       .register()
-      .registerRunListener(args.device.showDashboard);
+      .registerRunListener(args => args.device.showDashboard);
   }
 }
 
