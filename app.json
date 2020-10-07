@@ -35,7 +35,7 @@
   },
   "drivers": [
     {
-      "id": "fully_desktop",
+      "id": "fully_browser",
       "name": {
         "en": "Fully Browser on Android",
         "nl": "Fully Browser op Android"
@@ -126,5 +126,31 @@
         }
       ]
     }
-  ]
+  ],
+  "flow": {
+    "actions": [
+      {
+        "id": "dashboard",
+        "title": {
+          "en": "Email live snapshot",
+          "nl": "Email live snapshot"
+        },
+        "hint": {
+          "en": "Take a snapshot and send it with email (make sure email is configured in the app settings).",
+          "nl": "Maak een  snapshot en verstuur deze per email (zorg ervoor dat email is geconfigureerd in de app instellingen)."
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "placeholder": {
+              "en": "Select Fully Browser",
+              "nl": "Selecteer Fully Browser"
+            },
+            "filter": "driver_id=fully_browser"
+          }
+        ]
+      }
+    ]
+  }
 }

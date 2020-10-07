@@ -141,6 +141,19 @@ class FullyBrowserDevice extends Homey.Device {
       return reject(err);
     });
   }
+
+  async function showDashboard() {
+    /**
+     * Bring Fully Browser to foreground
+     */
+    const url = getAPIUrl('toForeground');
+
+    fetch(url.toString())
+    .then(utils.checkStatus)
+    .catch(err => {
+      return reject(err);
+    });
+  }
 }
 
 module.exports = FullyBrowserDevice;
