@@ -172,6 +172,19 @@ class FullyBrowserDevice extends Homey.Device {
     util.checkStatus(res);
   }
 
+  async startApplication(pkg) {
+    /**
+     * Load start Url
+     */
+    const url = this.getAPIUrl('startApplication');
+    url.searchParams.set('package', pkg);
+
+    this.log(url.toString());
+
+    const res = await fetch(url);
+    util.checkStatus(res);
+  }
+
   showDashboard() {
     /**
      * Show dashboard in Fully Browser
