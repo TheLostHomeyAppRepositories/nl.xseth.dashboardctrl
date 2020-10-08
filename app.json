@@ -180,6 +180,36 @@
             "filter": "driver_id=fully_browser"
           }
         ]
+      },
+      {
+        "id": "loadUrl",
+        "title": {
+          "en": "Load URL",
+          "nl": "Laad URL"
+        },
+        "hint": {
+          "en": "Load an URL on your device",
+          "nl": "Laad een URL op je apparaat"
+        },
+        "args": [
+          {
+            "name": "url",
+            "type": "text",
+            "placeholder": {
+              "en": "Enter URL to load",
+              "nl": "Geef URL op om te laden"
+            }
+          },
+          {
+            "name": "device",
+            "type": "device",
+            "placeholder": {
+              "en": "Select Fully Browser",
+              "nl": "Selecteer Fully Browser"
+            },
+            "filter": "driver_id=fully_browser"
+          }
+        ]
       }
     ]
   }

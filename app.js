@@ -14,6 +14,11 @@ class DashboardCtrlApp extends Homey.App {
     new Homey.FlowCardAction('application')
       .register()
       .registerRunListener(args => args.device.startApplication(args.pkg));
+
+    new Homey.FlowCardAction('loadUrl')
+      .register()
+      .registerRunListener(args => args.device.loadUrl(args.url));
+
   }
 
 }
