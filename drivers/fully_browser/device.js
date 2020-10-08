@@ -154,13 +154,29 @@ class FullyBrowserDevice extends Homey.Device {
     util.checkStatus(res);
   }
 
-  async showDashboard() {
+  async bringFullyToFront() {
     /**
      * Bring Fully Browser to foreground
      */
     const url = this.getAPIUrl('toForeground');
     const res = await fetch(url);
     util.checkStatus(res);
+  }
+
+  async loadStartUrl() {
+    /**
+     * Load start Url
+     */
+    const url = this.getAPIUrl('loadStartUrl');
+    const res = await fetch(url);
+    util.checkStatus(res);
+  }
+
+  showDashboard() {
+    /**
+     * Show dashboard in Fully Browser
+     */
+    return Promise.all(this.bringFullyToFront(), this.loadStartUrl());
   }
 
 }

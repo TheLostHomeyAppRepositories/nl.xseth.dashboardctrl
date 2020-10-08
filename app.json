@@ -132,12 +132,12 @@
       {
         "id": "dashboard",
         "title": {
-          "en": "Email live snapshot",
-          "nl": "Email live snapshot"
+          "en": "Show dashboard",
+          "nl": "Toon dashboard"
         },
         "hint": {
-          "en": "Take a snapshot and send it with email (make sure email is configured in the app settings).",
-          "nl": "Maak een  snapshot en verstuur deze per email (zorg ervoor dat email is geconfigureerd in de app instellingen)."
+          "en": "Show the dashboard on your device",
+          "nl": "Toon de dashboard op je apparaat"
         },
         "args": [
           {
