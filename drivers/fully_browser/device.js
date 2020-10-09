@@ -24,6 +24,7 @@ class FullyBrowserDevice extends Homey.Device {
 
     // Register capabilities
     this.registerCapabilityListener('onoff', this.turnOnOff.bind(this));
+    this.registerCapabilityListener('dim', this.changeBrightness.bind(this));
   }
 
   onDeleted() {
@@ -82,7 +83,14 @@ class FullyBrowserDevice extends Homey.Device {
         // Verify for each property if capability needs updating
         for (const [fully, homey] of Object.entries(props)) {
           if (this.getCapabilityValue(homey) != stats[fully]){
-            this.setCapabilityValue(homey, stats[fully]);
+
+            if (fully === 'screenBrightness'){
+              const dim = Math.floor(100*(stats[fully] / 255).toFixed(2));
+              this.log(dim);
+              //this.setCapabilityValue(homey, dim);
+            }else
+              this.setCapabilityValue(homey, stats[fully]);
+
             this.log('Setting ['+homey+']: '+stats[fully]);
           }
         }
@@ -149,6 +157,22 @@ class FullyBrowserDevice extends Homey.Device {
      */
     const onoff = value ? 'screenOn' : 'screenOff'
     const url = this.getAPIUrl(onoff);
+
+    const res = await fetch(url);
+    util.checkStatus(res);
+  }
+
+  async changeBrightness(value, opts) {
+    /**
+     * Turn Fully Browser on or off
+     *
+     * @param {Double} value - percentage to dim 0-1
+     * @param {Object} opts - additional options
+     */
+
+    const url = this.getAPIUrl('setStringSetting');
+    url.searchParams.set('key', 'screenBrightness');
+    url.searchParams.set('value', Math.floor(value * 255));
 
     const res = await fetch(url);
     util.checkStatus(res);
