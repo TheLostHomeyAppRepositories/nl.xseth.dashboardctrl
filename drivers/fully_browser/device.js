@@ -68,30 +68,29 @@ class FullyBrowserDevice extends Homey.Device {
 
   poll() {
     /**
-     * Poll for device current status
+     * Poll for device current status and update Homey capabilities
      */
 
     // Translation Fully Browser REST -> Homey capabilities
-    const props = {
-      'screenOn': 'onoff',
-      'screenBrightness': 'dim',
-      'batteryLevel': 'measure_battery',
+    const deviceProperties = {
+      screenOn: 'onoff',
+      screenBrightness: 'dim',
+      batteryLevel: 'measure_battery'
     }
 
     this.getStatus()
       .then(stats => {
+        var value = null;
+
         // Verify for each property if capability needs updating
-        for (const [fully, homey] of Object.entries(props)) {
-          if (this.getCapabilityValue(homey) != stats[fully]){
+        for (const [fully, homey] of Object.entries(deviceProperties)) {
 
-            if (fully === 'screenBrightness'){
-              const dim = Math.floor(100*(stats[fully] / 255).toFixed(2));
-              this.log(dim);
-              //this.setCapabilityValue(homey, dim);
-            }else
-              this.setCapabilityValue(homey, stats[fully]);
+          // Get value, in case of screenBrightness calculate Fully value to Homey value
+          value = (fully === 'screenBrightness') ? util.calcBrightness(stats[fully]) : stats[fully];
 
-            this.log('Setting ['+homey+']: '+stats[fully]);
+          if (this.getCapabilityValue(homey) !== value) {
+            this.log('Setting [' + homey + ']: ' + value);
+            this.setCapabilityValue(homey, value);
           }
         }
 
