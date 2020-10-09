@@ -200,7 +200,7 @@ class FullyBrowserDevice extends Homey.Device {
     /**
      * Show dashboard in Fully Browser
      */
-    return Promise.all(this.bringFullyToFront(), this.loadStartUrl());
+    return Promise.all([this.bringFullyToFront(), this.loadStartUrl()]);
   }
 
 }
