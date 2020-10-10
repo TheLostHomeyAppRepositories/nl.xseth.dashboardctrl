@@ -6,17 +6,42 @@ const fetch = require('node-fetch');
 class FullyBrowserDriver extends Homey.Driver {
 
   onPair(socket) {
+    const driver = this;
+    var msg = Homey.__('pair.unknownerror');
+
     socket.on('testConnection', function(data, callback) {
       fetch(data.address + '/?cmd=deviceInfo&type=json&password=' + data.password)
         .then(res => {
-          if (res.ok) {
-            callback(false, res.json());
-          } else {
-            callback(true, 'Error');
-          }
+          if (!res.ok)
+            throw new Error(res);
+
+          // Parse JSON response
+          res.json().then(json => {
+            // Unauthorized is notified via Error in JSON
+            if (json.status === 'Error' && json.statustext === 'Please login')
+              throw new Error(Homey.__('pair.unauthorized'));
+            else if (json.status === 'Error')
+              throw new Error(Homey.__('pair.unknownerror'));
+            else
+              callback(null, json);
+
+          }).catch(err => {
+            driver.log(err);
+            callback(err);
+          });
         })
         .catch(err => {
-          callback(true, err);
+          if (err.errno === 'EHOSTUNREACH')
+            msg = Homey.__('pair.timeout');
+          else if (err.errno === 'ECONNREFUSED')
+            msg = Homey.__('pair.noconnection');
+          else if (err.statustext === 'Please login')
+            msg = Homey.__('pair.unauthorized');
+          else if (err.status === 500)
+            msg = Homey.__('pair.servererror');
+
+          err.message = msg;
+          callback(err);
         });
     });
   }
