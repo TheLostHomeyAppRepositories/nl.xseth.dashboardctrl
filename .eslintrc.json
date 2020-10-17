@@ -5,7 +5,8 @@
         "es6": true
     },
     "extends": [
-        "standard"
+        "standard",
+        "athom"
     ],
     "globals": {
         "Atomics": "readonly",
