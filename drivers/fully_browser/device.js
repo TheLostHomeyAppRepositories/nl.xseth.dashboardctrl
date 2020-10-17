@@ -142,9 +142,11 @@ class FullyBrowserDevice extends Homey.Device {
      */
 
     const url = this.getAPIUrl('deviceInfo');
-    const res = await fetch(url);
+    this.log('getStatus: ' + url);
 
+    const res = await fetch(url);
     util.checkStatus(res);
+
     return await res.json();
   }
 
@@ -156,6 +158,7 @@ class FullyBrowserDevice extends Homey.Device {
      */
     const onoff = value ? 'screenOn' : 'screenOff'
     const url = this.getAPIUrl(onoff);
+    this.log('turnOnOff: ' + url);
 
     const res = await fetch(url);
     util.checkStatus(res);
@@ -173,6 +176,8 @@ class FullyBrowserDevice extends Homey.Device {
     url.searchParams.set('key', 'screenBrightness');
     url.searchParams.set('value', Math.floor(value * 255));
 
+    this.log('changeBrightness: ' + url);
+
     const res = await fetch(url);
     util.checkStatus(res);
   }
@@ -182,6 +187,8 @@ class FullyBrowserDevice extends Homey.Device {
      * Bring Fully Browser to foreground
      */
     const url = this.getAPIUrl('toForeground');
+    this.log('bringFullyToFront: ' + url);
+
     const res = await fetch(url);
     util.checkStatus(res);
   }
@@ -191,6 +198,8 @@ class FullyBrowserDevice extends Homey.Device {
      * Load start Url
      */
     const url = this.getAPIUrl('loadStartUrl');
+    this.log('loadStartUrl: ' + url);
+
     const res = await fetch(url);
     util.checkStatus(res);
   }
@@ -201,6 +210,8 @@ class FullyBrowserDevice extends Homey.Device {
      */
     const url = this.getAPIUrl('loadUrl');
     url.searchParams.set('url', newUrl);
+
+    this.log('loadUrl: ' + url);
 
     const res = await fetch(url);
     util.checkStatus(res);
@@ -213,7 +224,7 @@ class FullyBrowserDevice extends Homey.Device {
     const url = this.getAPIUrl('startApplication');
     url.searchParams.set('package', pkg);
 
-    this.log(url.toString());
+    this.log('startApplication: ' + url);
 
     const res = await fetch(url);
     util.checkStatus(res);
