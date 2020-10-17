@@ -1,102 +1,102 @@
 <script type="text/javascript">
 
-Homey.setTitle( __('pair.title') );
+  Homey.setTitle( __('pair.title') );
 
-var stats = null;
+  var stats = null;
 
-$(function() {
-  $('#test-connection').click(function() {
-    $('.fully-test').hide();
-    $('.fully-ok').hide();
-    $('.fully-error').hide();
-    $('.fully-info').hide();
-    $('#connect').prop('disabled', true);
+  $(function() {
+      $('#test-connection').click(function() {
+          $('.fully-test').hide();
+          $('.fully-ok').hide();
+          $('.fully-error').hide();
+          $('.fully-info').hide();
+          $('#connect').prop('disabled', true);
 
-		var inputaddress = $('#address').val().trim().lowercase();
-    var inputpassword = $('#password').val();
-    var inputpolling = Number($('#polling').val());
+          var inputaddress = $('#address').val().trim().toLowerCase();
+          var inputpassword = $('#password').val();
+          var inputpolling = Number($('#polling').val());
 
-    if( inputaddress != '' && inputpassword != '' && inputpolling != '') {
-      var device_data = {
-        address  : inputaddress,
-  			password : inputpassword
-      };
+          if( inputaddress != '' && inputpassword != '' && inputpolling != '') {
+              var device_data = {
+                  address  : inputaddress,
+                  password : inputpassword
+                };
 
-      Homey.emit('testConnection', device_data, function(err, result){
-        if(!err) {
-          stats = result;
+              Homey.emit('testConnection', device_data, function(err, result){
+                  if(!err) {
+                      stats = result;
 
-          $('.fully-test').show();
-          $('.fully-test-msg').html( __('pair.testing', stats));
-          $('#connect').prop('disabled', false);
+                      $('.fully-test').show();
+                      $('.fully-test-msg').html( __('pair.testing', stats));
+                      $('#connect').prop('disabled', false);
 
-        } else {
-          $('.fully-error').show();
-          $('.fully-error-msg').html(err);
-        }
-      });
+                    } else {
+                        $('.fully-error').show();
+                        $('.fully-error-msg').html(err);
+                      }
+                });
 
-    } else {
-      $('.fully-error').show();
-      $('.fully-error-msg').html( __('pair.nosettings') );
-    }
+            } else {
+                $('.fully-error').show();
+                $('.fully-error-msg').html( __('pair.nosettings') );
+              }
 
-	});
+        });
 
-	$('#connect').click(function() {
-		var inputaddress = $('#address').val().trim().lowercase();
-    var inputpassword = $('#password').val();
-    var inputpolling = Number($('#polling').val());
+      $('#connect').click(function() {
+          var inputaddress = $('#address').val().trim().lowercase();
+          var inputpassword = $('#password').val();
+          var inputpolling = Number($('#polling').val());
 
-    if(!!inputaddress && !!inputpassword && !!inputpolling && !!stats) {
-      var device_data = {
-        id : stats.deviceID
-      };
+          if(!!inputaddress && !!inputpassword && !!inputpolling && !!stats) {
+              var device_data = {
+                  id : stats.deviceID
+                };
 
-      var settings = {
-        address  : inputaddress,
-  			password : inputpassword,
-        polling  : inputpolling
-      };
+              var settings = {
+                  address  : inputaddress,
+                  password : inputpassword,
+                  polling  : inputpolling
+                };
 
-      Homey.addDevice({
-        name	: stats.deviceName,
-        data 	: device_data,
-        settings: settings
-      }, function(error, result) {
-        if (error) {
-          $('.fully-error').show();
-          $('.fully-error-msg').html(error.message || error.toString() );
-        }
+              Homey.addDevice({
+                  name	: stats.deviceName,
+                  data 	: device_data,
+                  settings: settings
+                }, function(error, result) {
+                    if (error) {
+                        $('.fully-error').show();
+                        $('.fully-error-msg').html(error.message || error.toString() );
+                      }
 
-        $('.fully-test').hide();
-        $('.fully-error').hide();
-        $('.fully-ok').show();
+                    $('.fully-test').hide();
+                    $('.fully-error').hide();
+                    $('.fully-ok').show();
 
-        Homey.done();
-      })
+                    Homey.done();
+                  })
 
-    } else {
-      $('.fully-error').show();
-      $('.fully-error-msg').html( __('pair.nosettings') );
-    }
+            } else {
+                $('.fully-error').show();
+                $('.fully-error-msg').html( __('pair.nosettings') );
+              }
 
-	});
-})
+        });
+    })
 </script>
 
 <style type="text/css">
-  .form-group {
-    width: 100%;
-    display: block;
-    margin-bottom: 12px;
-  }
+.form-group {
+  width: 100%;
+  display: block;
+  margin-bottom: 12px;
+}
   .form-group label {
     display: block;
   }
-	.fully-status {
-		display: none;
-	}
+  .fully-status {
+    display: none;
+  }
   .buttons, .messages {
     padding-top: 14px;
   }
@@ -105,7 +105,7 @@ $(function() {
   }
   .button:disabled {
     color: #ccc;
-  }
+  
   .button:enabled {
     background-color: #00c139 !important;
     color: #fff;
@@ -119,12 +119,12 @@ $(function() {
     <input type="text" class="form-control" id="address" placeholder="http://192.168.1.1:2323/" required>
   </div>
   <div class="form-group">
-  	<label for="password" data-i18n="pair.password">Password</label>
-  	<input type="password" class="form-control" id="password">
+    <label for="password" data-i18n="pair.password">Password</label>
+    <input type="password" class="form-control" id="password">
   </div>
   <div class="form-group">
-  	<label for="polling" data-i18n="pair.polling">Polling Frequency</label>
-  	<input type="number" class="form-control" id="polling" min="5" max="3600" placeholder="15" value="15" required>
+    <label for="polling" data-i18n="pair.polling">Polling Frequency</label>
+    <input type="number" class="form-control" id="polling" min="5" max="3600" placeholder="15" value="15" required>
   </div>
   <div class="form-group buttons">
     <button id="test-connection" class="button" data-i18n="pair.test">Test Connection</button>
