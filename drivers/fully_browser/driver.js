@@ -10,7 +10,14 @@ class FullyBrowserDriver extends Homey.Driver {
     var msg = Homey.__('pair.unknownerror');
 
     socket.on('testConnection', function(data, callback) {
-      fetch(data.address + '/?cmd=deviceInfo&type=json&password=' + data.password)
+      const api = new URL(data.address.trim());
+      api.searchParams.set('type', 'json');
+      api.searchParams.set('cmd', 'deviceInfo');
+      api.searchParams.set('password', data.password);
+
+      driver.log('Fetching info from: ' + api.toString())
+
+      fetch(api)
         .then(res => {
           if (!res.ok)
             throw new Error(res);
