@@ -42,6 +42,12 @@ class FullyBrowserDevice extends Homey.Device {
     const URL = this.API;
     URL.searchParams.set('cmd', cmd);
 
+    // cleanup old parameters
+    URL.searchParams.delete('url');
+    URL.searchParams.delete('key');
+    URL.searchParams.delete('value');
+    URL.searchParams.delete('package');
+
     return URL;
   }
 
