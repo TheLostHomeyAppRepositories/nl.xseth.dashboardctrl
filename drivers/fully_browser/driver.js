@@ -10,12 +10,19 @@ class FullyBrowserDriver extends Homey.Driver {
     var msg = Homey.__('pair.unknownerror');
 
     socket.on('testConnection', function(data, callback) {
-      const api = new URL(data.address.trim());
-      api.searchParams.set('type', 'json');
-      api.searchParams.set('cmd', 'deviceInfo');
-      api.searchParams.set('password', data.password);
 
-      driver.log('Fetching info from: ' + api.toString())
+      try{
+        var url = data.address.trim();
+
+        // Verify if the protocol is added to URL
+        if(!url.startsWith('http://') && !url.startsWith('https://'))
+          url = 'http://' + url
+
+        const api = new URL(url)
+        api.searchParams.set('type', 'json');
+        api.searchParams.set('cmd', 'deviceInfo');
+        api.searchParams.set('password', data.password);
+        driver.log('Fetching info from: ' + api.toString())
 
       fetch(api)
         .then(res => {
@@ -50,6 +57,10 @@ class FullyBrowserDriver extends Homey.Driver {
           err.message = msg;
           callback(err);
         });
+      }catch(err){
+        err.message = Homey.__('err_url');
+        callback(err);
+      }
     });
   }
 

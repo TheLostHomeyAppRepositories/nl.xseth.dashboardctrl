@@ -18,5 +18,6 @@
 	},
   "Unreachable": "Onbereikbaar",
 	"err_sensor_battery": "Sensor data ontbreekt: battery",
+	"err_url": "Invalide URL",
   "Something went wrong": "Er is iets mis gegaan."
 }
