@@ -18,5 +18,6 @@
 	},
   "Unreachable": "Unreachable",
 	"err_sensor_battery": "Missing sensor data: battery",
+	"err_url": "Invalid URL",
   "Something went wrong": "Something went wrong."
 }
