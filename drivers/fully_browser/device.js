@@ -121,7 +121,6 @@ class FullyBrowserDevice extends Homey.Device {
     /**
      * Ping the device to verify availability
      */
-
     const self = this;
 
     clearInterval(this.polling);
@@ -130,12 +129,12 @@ class FullyBrowserDevice extends Homey.Device {
     this.pinging = setInterval(() => {
       self.getStatus()
         .then(result => {
-          this.setAvailable()
-          clearInterval(this.pinging);
-          this.polling = setInterval(this.poll, 1000 * this.getSettings('polling'));
+          self.setAvailable()
+          clearInterval(self.pinging);
+          self.polling = setInterval(self.poll.bind(self), 1000 * self.getSettings('polling'));
         })
         .catch(error => {
-          this.log('Device is not reachable, pinging every 63 seconds to see if it comes online again.');
+          self.log('Device is not reachable, pinging every 63 seconds to see if it comes online again.');
         })
     }, 63000);
   }
