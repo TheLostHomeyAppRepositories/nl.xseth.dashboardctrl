@@ -1,0 +1,12 @@
+name: Lint
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+      - name: Install eslint
+        run: npm install --save-dev eslint eslint-config-athom
+      - name: Run ESLint
+        run: eslint . --ext .js,.jsx,.ts,.tsx
