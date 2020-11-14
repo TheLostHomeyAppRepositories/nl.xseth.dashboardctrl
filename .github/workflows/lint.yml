@@ -6,7 +6,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
-      - name: Install eslint
-        run: npm install --save-dev eslint eslint-config-athom
-      - name: Run ESLint
-        run: eslint . --ext .js,.jsx,.ts,.tsx
+      - name: Run linters
+        uses: wearerequired/lint-action@v1
+        with:
+          github_token: ${{ secrets.github_token }}
+          # Enable linters
+          eslint: true
