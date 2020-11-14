@@ -5,8 +5,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
       - uses: actions/setup-node@v1
+
       - name: Install eslint
         run: npm install eslint eslint-config-athom
+
       - name: Run ESLint
-        run: eslint . --ext .js,.jsx,.ts,.tsx
+        run: node_modules/.bin/eslint . --ext .js,.jsx,.ts,.tsx
