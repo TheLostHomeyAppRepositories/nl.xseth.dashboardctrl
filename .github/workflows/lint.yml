@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v1
       - name: Install eslint
         run: npm install --save-dev eslint eslint-config-athom
       - name: Run ESLint
