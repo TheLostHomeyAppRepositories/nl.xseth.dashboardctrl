@@ -6,8 +6,8 @@
     "nl": "Dashboard Controller"
   },
   "tags": {
-    "en": [ "webcam", "android" ],
-    "nl": [ "webcam", "android" ]
+    "en": [ "dashboard", "fully" ],
+    "nl": [ "dashboard", "fully" ]
   },
   "version": "0.1.5",
   "compatibility": ">=3.0.0",
