@@ -131,7 +131,7 @@ class FullyBrowserDevice extends Homey.Device {
         .then(result => {
           self.setAvailable()
           clearInterval(self.pinging);
-          self.polling = setInterval(self.poll.bind(self), 1000 * self.getSettings('polling'));
+          self.polling = setInterval(self.poll.bind(self), 1000 * self.getSettings().polling);
         })
         .catch(error => {
           self.log('Device is not reachable, pinging every 63 seconds to see if it comes online again.');
