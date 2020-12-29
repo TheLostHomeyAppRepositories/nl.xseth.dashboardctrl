@@ -42,6 +42,8 @@ class FullyBrowserDevice extends Homey.Device {
     const URL = this.API;
     URL.searchParams.set('cmd', cmd);
 
+    this.log('Executing cmd=['+cmd+']');
+
     // cleanup old parameters
     URL.searchParams.delete('url');
     URL.searchParams.delete('key');
@@ -123,12 +125,15 @@ class FullyBrowserDevice extends Homey.Device {
      */
     const self = this;
 
+    this.log('Device is not reachable, pinging every 63 seconds to see if it comes online again.');
+
     clearInterval(this.polling);
     clearInterval(this.pinging);
 
     this.pinging = setInterval(() => {
       self.getStatus()
         .then(result => {
+          self.log('Device reachable again, setting available, start polling again');
           self.setAvailable()
           clearInterval(self.pinging);
           self.polling = setInterval(self.poll.bind(self), 1000 * self.getSettings().polling);
@@ -147,8 +152,6 @@ class FullyBrowserDevice extends Homey.Device {
      */
 
     const url = this.getAPIUrl('deviceInfo');
-    this.log('getStatus: ' + url);
-
     const res = await fetch(url);
     util.checkStatus(res);
 
@@ -163,8 +166,6 @@ class FullyBrowserDevice extends Homey.Device {
      */
     const onoff = value ? 'screenOn' : 'screenOff'
     const url = this.getAPIUrl(onoff);
-    this.log('turnOnOff: ' + url);
-
     const res = await fetch(url);
     util.checkStatus(res);
   }
@@ -181,8 +182,6 @@ class FullyBrowserDevice extends Homey.Device {
     url.searchParams.set('key', 'screenBrightness');
     url.searchParams.set('value', Math.floor(value * 255));
 
-    this.log('changeBrightness: {url}');
-
     const res = await fetch(url);
     util.checkStatus(res);
   }
@@ -192,8 +191,6 @@ class FullyBrowserDevice extends Homey.Device {
      * Bring Fully Browser to foreground
      */
     const url = this.getAPIUrl('toForeground');
-    this.log('bringFullyToFront: ' + url);
-
     const res = await fetch(url);
     util.checkStatus(res);
   }
@@ -203,8 +200,6 @@ class FullyBrowserDevice extends Homey.Device {
      * Load start Url
      */
     const url = this.getAPIUrl('loadStartUrl');
-    this.log('loadStartUrl: ' + url);
-
     const res = await fetch(url);
     util.checkStatus(res);
   }
@@ -216,8 +211,6 @@ class FullyBrowserDevice extends Homey.Device {
     const url = this.getAPIUrl('loadUrl');
     url.searchParams.set('url', newUrl);
 
-    this.log('loadUrl: ' + url);
-
     const res = await fetch(url);
     util.checkStatus(res);
   }
@@ -228,8 +221,6 @@ class FullyBrowserDevice extends Homey.Device {
      */
     const url = this.getAPIUrl('startApplication');
     url.searchParams.set('package', pkg);
-
-    this.log('startApplication: ' + url);
 
     const res = await fetch(url);
     util.checkStatus(res);
