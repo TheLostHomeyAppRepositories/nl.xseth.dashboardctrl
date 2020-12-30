@@ -7,7 +7,7 @@ class FullyBrowserDriver extends Homey.Driver {
 
   onPair(socket) {
     const driver = this;
-    var msg = Homey.__('pair.unknownerror');
+    let msg = Homey.__('pair.unknownerror');
 
     socket.on('testConnection', function(data, callback) {
       const api = new URL(data.address.trim());

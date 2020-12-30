@@ -58,7 +58,7 @@ class FullyBrowserDevice extends Homey.Device {
 
     this.snapshot = new Homey.Image();
 
-    this.snapshot.setStream(async (stream) => {
+    this.snapshot.setStream(async stream => {
       const res = await fetch(this.getAPIUrl('getCamshot'));
       util.checkStatus(res);
 
@@ -81,12 +81,12 @@ class FullyBrowserDevice extends Homey.Device {
     const deviceProperties = {
       screenOn: 'onoff',
       screenBrightness: 'dim',
-      batteryLevel: 'measure_battery'
+      batteryLevel: 'measure_battery',
     }
 
     this.getStatus()
       .then(stats => {
-        var value = null;
+        let value = null;
 
         // Verify for each property if capability needs updating
         for (const [fully, homey] of Object.entries(deviceProperties)) {
@@ -95,7 +95,7 @@ class FullyBrowserDevice extends Homey.Device {
           value = (fully === 'screenBrightness') ? util.calcBrightness(stats[fully]) : stats[fully];
 
           if (this.getCapabilityValue(homey) !== value) {
-            this.log('Setting [' + homey + ']: ' + value);
+            this.log(`Setting [{homey}]: {value}`);
             this.setCapabilityValue(homey, value);
           }
         }
@@ -153,7 +153,7 @@ class FullyBrowserDevice extends Homey.Device {
     const res = await fetch(url);
     util.checkStatus(res);
 
-    return await res.json();
+    return res.json();
   }
 
   async turnOnOff(value) {
@@ -182,7 +182,7 @@ class FullyBrowserDevice extends Homey.Device {
     url.searchParams.set('key', 'screenBrightness');
     url.searchParams.set('value', Math.floor(value * 255));
 
-    this.log('changeBrightness: ' + url);
+    this.log('changeBrightness: {url}');
 
     const res = await fetch(url);
     util.checkStatus(res);
