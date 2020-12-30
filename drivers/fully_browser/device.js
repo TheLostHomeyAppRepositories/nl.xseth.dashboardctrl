@@ -6,6 +6,8 @@ const Homey = require('homey');
 const fetch = require('node-fetch');
 const util = require('/lib/util.js');
 
+const { ManagerCloud } = require('homey');
+
 class FullyBrowserDevice extends Homey.Device {
 
   onInit() {
@@ -224,6 +226,52 @@ class FullyBrowserDevice extends Homey.Device {
 
     const res = await fetch(url);
     util.checkStatus(res);
+  }
+
+  async showImage(image) {
+    /**
+     * Show image on device
+     */
+
+    let imgSrc = image.cloudUrl ? image.cloudUrl : image.localUrl;
+
+    // if not URL is available in image, use stream for base64 data
+    if (!imgSrc) {
+      const stream = await image.getStream()
+      const imgBase64 = await util.toBase64(stream);
+
+      imgSrc = `data:image/png;base64,${imgBase64}`;
+    }
+
+    // If image only contains stream, view via own HTTP server
+    const port = util.getRandomBetween(40000, 50000); // Get random HTTP port
+
+    // function for handling GET requests on server
+    const self = this;
+    const onRequest = function onRequest(req, res) {
+      self.log('Parsing request');
+      const html = `
+      <html>
+        <body style="margin: 0px;">
+          <img src="${imgSrc}" style="height: 100%; width: auto; max-width: 100%; display: block; margin-left: auto; margin-right: auto;" />
+        </body>
+      </html>`
+
+      res.write(html);
+      res.end();
+    };
+
+    // Start HTTP server
+    util.startServer(port, onRequest);
+
+    // Generate URL for Fully to connect to
+    const local = await ManagerCloud.getLocalAddress();
+    const IP = local.split(':')[0];
+    const URL = `http://${IP}:${port}`
+
+    this.log(`Image available on ${URL}`);
+
+    return this.loadUrl(URL);
   }
 
   showDashboard() {

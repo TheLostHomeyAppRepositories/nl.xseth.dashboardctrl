@@ -209,6 +209,29 @@
             "filter": "driver_id=fully_browser"
           }
         ]
+      },
+      {
+        "id": "showImage",
+        "droptoken": "image",
+        "title": {
+          "en": "Show image",
+          "nl": "Toon afbeelding"
+        },
+        "hint": {
+          "en": "Show an image on your device",
+          "nl": "Toon een afbeelding op je apparaat"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "placeholder": {
+              "en": "Select Fully Browser",
+              "nl": "Selecteer Fully Browser"
+            },
+            "filter": "driver_id=fully_browser"
+          }
+        ]
       }
     ]
   }
