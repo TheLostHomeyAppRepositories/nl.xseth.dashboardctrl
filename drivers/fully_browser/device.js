@@ -256,6 +256,7 @@ class FullyBrowserDevice extends Homey.Device {
 
     // function for handling GET requests on server
     const self = this;
+
     const onRequest = function onRequest(req, res) {
       self.log('Parsing request');
       const html = nutil.format(template.html_image, backgroundColor, imgSrc);
