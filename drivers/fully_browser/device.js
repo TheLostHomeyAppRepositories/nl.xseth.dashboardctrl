@@ -247,11 +247,9 @@ class FullyBrowserDevice extends Homey.Device {
       imgSrc = `data:image/png;base64,${imgBase64}`;
     }
 
-    // If image only contains stream, view via own HTTP server
-    const port = util.getRandomBetween(40000, 50000); // Get random HTTP port
-
     // function for handling GET requests on server
     const self = this;
+
     const onRequest = function onRequest(req, res) {
       self.log('Parsing request');
       const html = nutil.format(template.html_image, backgroundColor, imgSrc);
@@ -261,6 +259,7 @@ class FullyBrowserDevice extends Homey.Device {
     };
 
     // Start HTTP server
+    const port = util.getRandomBetween(40000, 50000); // Get random HTTP port
     util.startServer(port, onRequest);
 
     // Generate URL for Fully to connect to
