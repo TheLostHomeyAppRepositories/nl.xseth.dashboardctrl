@@ -2,22 +2,23 @@
 
 const Homey = require('homey');
 const fetch = require('node-fetch');
+const util = require('/lib/util.js');
 
 class FullyBrowserDriver extends Homey.Driver {
 
   onPair(socket) {
     const driver = this;
-    var msg = Homey.__('pair.unknownerror');
+    let msg = Homey.__('pair.unknownerror');
 
     socket.on('testConnection', function(data, callback) {
 
       try{
-        var url = data.address.trim();
+        // Validate URL and fix it
+        var url = util.fixURL(data.address.trim());
 
-        // Verify if the protocol is added to URL
-        if(!url.startsWith('http://') && !url.startsWith('https://'))
-          url = 'http://' + url
-
+        if(!url)  // if URL is none it is invalid and not fixable
+          throw new Error(Homey.__('err_url'));
+      
         const api = new URL(url)
         api.searchParams.set('type', 'json');
         api.searchParams.set('cmd', 'deviceInfo');
@@ -58,7 +59,7 @@ class FullyBrowserDriver extends Homey.Driver {
           callback(err);
         });
       }catch(err){
-        err.message = Homey.__('err_url');
+        driver.log(err);
         callback(err);
       }
     });

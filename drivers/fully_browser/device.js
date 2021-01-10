@@ -2,14 +2,25 @@
 
 require('url');
 
+const nutil = require('util');
 const Homey = require('homey');
 const fetch = require('node-fetch');
 const util = require('/lib/util.js');
+const template = require('/lib/template.js');
+
+const { ManagerCloud } = require('homey');
 
 class FullyBrowserDevice extends Homey.Device {
 
   onInit() {
     const settings = this.getSettings();
+
+    // Verify URL and autofix if possible
+    if(!util.validURL(settings.address)){
+      settings.address = util.fixURL(settings.address);
+      this.setSettings(settings);
+      this.log(`Autofixing URL to: ${settings.address}`)
+    }
 
     const api = new URL(settings.address);
     api.searchParams.set('type', 'json');
@@ -60,7 +71,7 @@ class FullyBrowserDevice extends Homey.Device {
 
     this.snapshot = new Homey.Image();
 
-    this.snapshot.setStream(async (stream) => {
+    this.snapshot.setStream(async stream => {
       const res = await fetch(this.getAPIUrl('getCamshot'));
       util.checkStatus(res);
 
@@ -83,12 +94,12 @@ class FullyBrowserDevice extends Homey.Device {
     const deviceProperties = {
       screenOn: 'onoff',
       screenBrightness: 'dim',
-      batteryLevel: 'measure_battery'
+      batteryLevel: 'measure_battery',
     }
 
     this.getStatus()
       .then(stats => {
-        var value = null;
+        let value = null;
 
         // Verify for each property if capability needs updating
         for (const [fully, homey] of Object.entries(deviceProperties)) {
@@ -97,7 +108,7 @@ class FullyBrowserDevice extends Homey.Device {
           value = (fully === 'screenBrightness') ? util.calcBrightness(stats[fully]) : stats[fully];
 
           if (this.getCapabilityValue(homey) !== value) {
-            this.log('Setting [' + homey + ']: ' + value);
+            this.log(`Setting [{homey}]: {value}`);
             this.setCapabilityValue(homey, value);
           }
         }
@@ -155,7 +166,7 @@ class FullyBrowserDevice extends Homey.Device {
     const res = await fetch(url);
     util.checkStatus(res);
 
-    return await res.json();
+    return res.json();
   }
 
   async turnOnOff(value) {
@@ -224,6 +235,48 @@ class FullyBrowserDevice extends Homey.Device {
 
     const res = await fetch(url);
     util.checkStatus(res);
+  }
+
+  async showImage(backgroundColor, image) {
+    /**
+     * Show image on device
+     * @param {String} backgroundColor - Color in hex format for background
+     * @param {Image} image - Homey image object to show
+     */
+
+    let imgSrc = image.cloudUrl ? image.cloudUrl : image.localUrl;
+
+    // if not URL is available in image, use stream for base64 data
+    if (!imgSrc) {
+      const stream = await image.getStream()
+      const imgBase64 = await util.toBase64(stream);
+
+      imgSrc = `data:image/png;base64,${imgBase64}`;
+    }
+
+    // function for handling GET requests on server
+    const self = this;
+
+    const onRequest = function onRequest(req, res) {
+      self.log('Parsing request');
+      const html = nutil.format(template.html_image, backgroundColor, imgSrc);
+
+      res.write(html);
+      res.end();
+    };
+
+    // Start HTTP server
+    const port = util.getRandomBetween(40000, 50000); // Get random HTTP port
+    util.startServer(port, onRequest);
+
+    // Generate URL for Fully to connect to
+    const local = await ManagerCloud.getLocalAddress();
+    const IP = local.split(':')[0];
+    const URL = `http://${IP}:${port}`
+
+    this.log(`Image available on ${URL}`);
+
+    return Promise.all([this.bringFullyToFront(), this.loadStartUrl(URL)]);
   }
 
   showDashboard() {

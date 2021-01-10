@@ -4,7 +4,7 @@ Ondersteunde talen
 🇬🇧English
 🇳🇱Nederlands
 
-Ondersteunde aparten
+Ondersteunde apparaten:
 • Fully browser op Android
 
 Hoe krijg ik het werkend?
