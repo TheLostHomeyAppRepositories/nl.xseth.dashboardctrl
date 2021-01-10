@@ -6,6 +6,8 @@ const Homey = require('homey');
 const fetch = require('node-fetch');
 const util = require('/lib/util.js');
 
+const { ManagerCloud } = require('homey');
+
 class FullyBrowserDevice extends Homey.Device {
 
   onInit() {
@@ -60,7 +62,7 @@ class FullyBrowserDevice extends Homey.Device {
 
     this.snapshot = new Homey.Image();
 
-    this.snapshot.setStream(async (stream) => {
+    this.snapshot.setStream(async stream => {
       const res = await fetch(this.getAPIUrl('getCamshot'));
       util.checkStatus(res);
 
@@ -83,12 +85,12 @@ class FullyBrowserDevice extends Homey.Device {
     const deviceProperties = {
       screenOn: 'onoff',
       screenBrightness: 'dim',
-      batteryLevel: 'measure_battery'
+      batteryLevel: 'measure_battery',
     }
 
     this.getStatus()
       .then(stats => {
-        var value = null;
+        let value = null;
 
         // Verify for each property if capability needs updating
         for (const [fully, homey] of Object.entries(deviceProperties)) {
@@ -97,7 +99,7 @@ class FullyBrowserDevice extends Homey.Device {
           value = (fully === 'screenBrightness') ? util.calcBrightness(stats[fully]) : stats[fully];
 
           if (this.getCapabilityValue(homey) !== value) {
-            this.log('Setting [' + homey + ']: ' + value);
+            this.log(`Setting [{homey}]: {value}`);
             this.setCapabilityValue(homey, value);
           }
         }
@@ -155,7 +157,7 @@ class FullyBrowserDevice extends Homey.Device {
     const res = await fetch(url);
     util.checkStatus(res);
 
-    return await res.json();
+    return res.json();
   }
 
   async turnOnOff(value) {
@@ -224,6 +226,52 @@ class FullyBrowserDevice extends Homey.Device {
 
     const res = await fetch(url);
     util.checkStatus(res);
+  }
+
+  async showImage(image) {
+    /**
+     * Show image on device
+     */
+
+    let imgSrc = image.cloudUrl ? image.cloudUrl : image.localUrl;
+
+    // if not URL is available in image, use stream for base64 data
+    if (!imgSrc) {
+      const stream = await image.getStream()
+      const imgBase64 = await util.toBase64(stream);
+
+      imgSrc = `data:image/png;base64,${imgBase64}`;
+    }
+
+    // If image only contains stream, view via own HTTP server
+    const port = util.getRandomBetween(40000, 50000); // Get random HTTP port
+
+    // function for handling GET requests on server
+    const self = this;
+    const onRequest = function onRequest(req, res) {
+      self.log('Parsing request');
+      const html = `
+      <html>
+        <body style="margin: 0px;">
+          <img src="${imgSrc}" style="height: 100%; width: auto; max-width: 100%; display: block; margin-left: auto; margin-right: auto;" />
+        </body>
+      </html>`
+
+      res.write(html);
+      res.end();
+    };
+
+    // Start HTTP server
+    util.startServer(port, onRequest);
+
+    // Generate URL for Fully to connect to
+    const local = await ManagerCloud.getLocalAddress();
+    const IP = local.split(':')[0];
+    const URL = `http://${IP}:${port}`
+
+    this.log(`Image available on ${URL}`);
+
+    return this.loadUrl(URL);
   }
 
   showDashboard() {

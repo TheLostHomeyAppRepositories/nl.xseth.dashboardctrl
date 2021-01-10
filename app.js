@@ -19,6 +19,10 @@ class DashboardCtrlApp extends Homey.App {
       .register()
       .registerRunListener(args => args.device.loadUrl(args.url));
 
+    new Homey.FlowCardAction('showImage')
+      .register()
+      .registerRunListener(args => args.device.showImage(args.droptoken));
+
   }
 
 }
