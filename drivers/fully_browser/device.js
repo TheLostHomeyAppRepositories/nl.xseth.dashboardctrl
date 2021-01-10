@@ -2,9 +2,11 @@
 
 require('url');
 
+const nutil = require('util');
 const Homey = require('homey');
 const fetch = require('node-fetch');
 const util = require('/lib/util.js');
+const template = require('/lib/template.js');
 
 const { ManagerCloud } = require('homey');
 
@@ -250,12 +252,7 @@ class FullyBrowserDevice extends Homey.Device {
     const self = this;
     const onRequest = function onRequest(req, res) {
       self.log('Parsing request');
-      const html = `
-      <html>
-        <body style="margin: 0px;">
-          <img src="${imgSrc}" style="height: 100%; width: auto; max-width: 100%; display: block; margin-left: auto; margin-right: auto;" />
-        </body>
-      </html>`
+      const html = nutil.format(template.html_image, backgroundColor, imgSrc);
 
       res.write(html);
       res.end();
