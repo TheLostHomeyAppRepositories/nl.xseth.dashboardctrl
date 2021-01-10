@@ -15,6 +15,13 @@ class FullyBrowserDevice extends Homey.Device {
   onInit() {
     const settings = this.getSettings();
 
+    // Verify URL and autofix if possible
+    if(!util.validURL(settings.address)){
+      settings.address = util.fixURL(settings.address);
+      this.setSettings(settings);
+      this.log(`Autofixing URL to: ${settings.address}`)
+    }
+
     const api = new URL(settings.address);
     api.searchParams.set('type', 'json');
     api.searchParams.set('password', settings.password);
