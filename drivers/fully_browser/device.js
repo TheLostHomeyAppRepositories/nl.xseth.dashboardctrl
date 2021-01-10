@@ -268,7 +268,7 @@ class FullyBrowserDevice extends Homey.Device {
 
     this.log(`Image available on ${URL}`);
 
-    return this.loadUrl(URL);
+    return Promise.all([this.bringFullyToFront(), this.loadStartUrl(URL)]);
   }
 
   showDashboard() {
