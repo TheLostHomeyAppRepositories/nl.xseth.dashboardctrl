@@ -230,9 +230,11 @@ class FullyBrowserDevice extends Homey.Device {
     util.checkStatus(res);
   }
 
-  async showImage(image) {
+  async showImage(backgroundColor, image) {
     /**
      * Show image on device
+     * @param {String} backgroundColor - Color in hex format for background
+     * @param {Image} image - Homey image object to show
      */
 
     let imgSrc = image.cloudUrl ? image.cloudUrl : image.localUrl;

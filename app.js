@@ -21,7 +21,7 @@ class DashboardCtrlApp extends Homey.App {
 
     new Homey.FlowCardAction('showImage')
       .register()
-      .registerRunListener(args => args.device.showImage(args.droptoken));
+      .registerRunListener(args => args.device.showImage(args.color, args.droptoken));
 
   }
 
