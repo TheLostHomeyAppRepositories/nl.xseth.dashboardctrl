@@ -230,6 +230,13 @@ class FullyBrowserDevice extends Homey.Device {
     /**
      * Load start Url
      */
+
+    // Validate pkg 
+    const regex_id =  /^[a-z][a-z0-9_]*(\.[a-z0-9_]+)+[0-9a-z_]$/i;
+    if (!regex_id.test(pkg))
+
+
+
     const url = this.getAPIUrl('startApplication');
     url.searchParams.set('package', pkg);
 
