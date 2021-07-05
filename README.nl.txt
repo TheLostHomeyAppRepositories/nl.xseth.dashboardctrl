@@ -10,6 +10,6 @@ Ondersteunde apparaten:
 Hoe krijg ik het werkend?
 • Installeer Fully Browser op je Android apparaat.
 • Zet remote administration aan via de instellingen.
-• Voeg het apparaat toe in Homey and controleer je dashboards.
+• Voeg het apparaat toe in Homey and bedien je dashboards.
 
 Voor verdere vragen of informatie zie het DashboardControl onderwerp in de Athom Community forum.

@@ -170,7 +170,7 @@
             "type": "text",
             "placeholder": {
               "en": "Enter android application ID",
-              "nl": "Geef selecteer android applicatie id op"
+              "nl": "Voer android applicatie ID op"
             }
           },
           {
