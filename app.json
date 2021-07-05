@@ -156,6 +156,10 @@
           "en": "Start application",
           "nl": "Start application"
         },
+        "titleFormatted": {
+          "en": "Start [[pkg]] application",
+          "nl": "Start [[pkg]] applicatie"
+        },
         "hint": {
           "en": "Start an Android application on your device",
           "nl": "Start een Android applicatie op je apparaat"
@@ -185,6 +189,10 @@
         "title": {
           "en": "Load URL",
           "nl": "Laad URL"
+        },
+        "titleFormatted": {
+          "en": "Load URL: [[url]]",
+          "nl": "Laad URL: [[url]]"
         },
         "hint": {
           "en": "Load an URL on your device",
@@ -216,6 +224,10 @@
         "title": {
           "en": "Show image",
           "nl": "Toon afbeelding"
+        },
+        "titleFormatted": {
+          "en": "Show [[droptoken]] with backgroundcolor [[color]]",
+          "nl": "Toon [[droptoken]] met achtergrondkleur [[color]]"
         },
         "hint": {
           "en": "Show an image on your device",
