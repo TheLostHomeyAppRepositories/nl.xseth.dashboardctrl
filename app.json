@@ -235,6 +235,10 @@
         },
         "args": [
           {
+            "type": "color",
+            "name": "color"
+          },
+          {
             "name": "device",
             "type": "device",
             "placeholder": {
@@ -242,10 +246,6 @@
               "nl": "Selecteer Fully Browser"
             },
             "filter": "driver_id=fully_browser"
-          },
-          {
-          "type": "color",
-          "name": "color"
           }
         ]
       }
