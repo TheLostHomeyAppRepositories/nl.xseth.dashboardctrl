@@ -1,6 +1,7 @@
 {
   "id": "nl.xseth.dashboardctrl",
   "sdk": 2,
+  "brandColor": "#1200F0",
   "name": {
     "en": "Dashboard Controller",
     "nl": "Dashboard Controller"
