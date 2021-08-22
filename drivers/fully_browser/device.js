@@ -108,7 +108,7 @@ class FullyBrowserDevice extends Homey.Device {
           value = (fully === 'screenBrightness') ? util.calcBrightness(stats[fully]) : stats[fully];
 
           if (this.getCapabilityValue(homey) !== value) {
-            this.log(`Setting [{homey}]: {value}`);
+            this.log(`Setting [${homey}]: ${value}`);
             this.setCapabilityValue(homey, value);
           }
         }
