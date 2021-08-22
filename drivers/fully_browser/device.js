@@ -266,17 +266,20 @@ class FullyBrowserDevice extends Homey.Device {
     };
 
     // Start HTTP server
-    const port = util.getRandomBetween(40000, 50000); // Get random HTTP port
-    util.startServer(port, onRequest);
-
-    // Generate URL for Fully to connect to
     const local = await ManagerCloud.getLocalAddress();
-    const IP = local.split(':')[0];
-    const URL = `http://${IP}:${port}`
+    const server = util.startServer(onRequest);
 
-    this.log(`Image available on ${URL}`);
+    server.on('listening', function() {
+      const port = server.address()['port'];
 
-    return Promise.all([this.bringFullyToFront(), this.loadUrl(URL)]);
+      // Generate URL for Fully to connect to
+      const IP = local.split(':')[0];
+      const URL = `http://${IP}:${port}`
+
+      self.log(`Image available on ${URL}`);
+
+      return Promise.all([self.bringFullyToFront(), self.loadUrl(URL)]);
+    });
   }
 
   showDashboard() {
