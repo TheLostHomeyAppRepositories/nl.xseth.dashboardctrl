@@ -51,6 +51,8 @@ class FullyBrowserDevice extends Homey.Device {
 
       return res.body.pipe(stream);
     });
+
+    await this.setCameraImage('front', this.homey.__('Live CamSnapshot'), snapshot)
   }
 
   onDeleted() {
