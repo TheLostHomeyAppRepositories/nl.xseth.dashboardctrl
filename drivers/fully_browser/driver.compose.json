@@ -1,91 +1,107 @@
+{
+  "id": "fully_browser",
+  "name": {
+    "en": "Fully Browser on Android",
+    "nl": "Fully Browser op Android"
+  },
+  "images": {
+    "large": "drivers/fully_browser/assets/images/large.jpg",
+    "small": "drivers/fully_browser/assets/images/small.jpg"
+  },
+  "class": "other",
+  "capabilities": [
+    "onoff",
+    "dim",
+    "measure_battery"
+  ],
+  "energy": {
+    "batteries": [
+      "INTERNAL"
+    ]
+  },
+  "pair": [
     {
-      "id": "fully_browser",
-      "name": {
-        "en": "Fully Browser on Android",
-        "nl": "Fully Browser op Android"
-      },
-      "images": {
-        "large": "drivers/fully_browser/assets/images/large.jpg",
-        "small": "drivers/fully_browser/assets/images/small.jpg"
-      },
-      "class": "other",
-      "capabilities": [
-        "onoff",
-        "dim",
-        "measure_battery"
-      ],
-      "energy": {
-        "batteries": ["INTERNAL"]
-      },
-      "pair": [
-        {
-          "id": "start"
-        }
-      ],
-      "mobile": {
-        "components": [
-          {
-            "id": "battery",
-            "capabilities": ["measure_battery"]
-          },
-          {
-            "id": "icon"
-          },
-          {
-            "id": "sensor",
-            "capabilities": ["alarm_motion"]
-          },
-          {
-            "id": "sensor",
-            "capabilities": ["alarm_generic"]
-          },
-          {
-            "id": "sensor",
-            "capabilities": ["measure_luminance"]
-          }
+      "id": "start"
+    }
+  ],
+  "mobile": {
+    "components": [
+      {
+        "id": "battery",
+        "capabilities": [
+          "measure_battery"
         ]
       },
-      "settings": [
+      {
+        "id": "icon"
+      },
+      {
+        "id": "sensor",
+        "capabilities": [
+          "alarm_motion"
+        ]
+      },
+      {
+        "id": "sensor",
+        "capabilities": [
+          "alarm_generic"
+        ]
+      },
+      {
+        "id": "sensor",
+        "capabilities": [
+          "measure_luminance"
+        ]
+      }
+    ]
+  },
+  "settings": [
+    {
+      "type": "group",
+      "label": {
+        "en": "Fully Browser settings",
+        "nl": "Fully Browser instellingen"
+      },
+      "children": [
         {
-          "type": "group",
+          "id": "address",
+          "type": "text",
+          "value": "http://192.168.1.1:2323",
           "label": {
-            "en": "Fully Browser settings",
-            "nl": "Fully Browser instellingen"
+            "en": "IP Address",
+            "nl": "IP adres"
+          }
+        },
+        {
+          "id": "password",
+          "type": "password",
+          "value": "",
+          "label": {
+            "en": "Password",
+            "nl": "Wachtwoord"
+          }
+        },
+        {
+          "id": "polling",
+          "type": "number",
+          "value": 15,
+          "step": 1,
+          "attr": {
+            "min": 5,
+            "max": 3600
           },
-          "children": [
-            {
-              "id": "address",
-              "type": "text",
-              "value": "http://192.168.1.1:2323",
-              "label": {
-                "en": "IP Address",
-                "nl": "IP adres"
-              }
-            },
-            {
-              "id": "password",
-              "type": "password",
-              "value": "",
-              "label": {
-                "en": "Password",
-                "nl": "Wachtwoord"
-              }
-            },
-            {
-              "id": "polling",
-              "type": "number",
-              "value": 15,
-              "step": 1,
-              "attr": {
-                "min": 5,
-                "max": 3600
-              },
-              "label": {
-                "en": "Polling",
-                "nl": "Polling"
-              }
-            }
-          ]
+          "label": {
+            "en": "Polling",
+            "nl": "Polling"
+          }
         }
       ]
     }
+  ],
+  "connectivity": [
+    "lan"
+  ],
+  "platforms": [
+    "local"
+  ]
+}

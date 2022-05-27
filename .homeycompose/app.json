@@ -1,17 +1,23 @@
 {
   "id": "nl.xseth.dashboardctrl",
-  "sdk": 2,
+  "sdk": 3,
   "brandColor": "#1200F0",
   "name": {
     "en": "Dashboard Controller",
     "nl": "Dashboard Controller"
   },
   "tags": {
-    "en": [ "dashboard", "fully" ],
-    "nl": [ "dashboard", "fully" ]
+    "en": [
+      "dashboard",
+      "fully"
+    ],
+    "nl": [
+      "dashboard",
+      "fully"
+    ]
   },
   "version": "0.2.2",
-  "compatibility": ">=3.0.0",
+  "compatibility": ">=5.0.0",
   "author": {
     "name": "Roy K",
     "website": "https://github.com/rkokkelk/nl.xseth.dashboardctrl"
@@ -33,5 +39,8 @@
   },
   "dependencies": {
     "net": "*"
-  }
+  },
+  "platforms": [
+    "local"
+  ]
 }
