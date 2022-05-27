@@ -6,7 +6,7 @@
     },
     "extends": [
         "standard",
-        "athom"
+        "plugin:homey-app/recommended"
     ],
     "globals": {
         "Atomics": "readonly",

@@ -7,20 +7,16 @@ class DashboardCtrlApp extends Homey.App {
   onInit() {
     this.log('Initializing Dashboard control app.');
 
-    new Homey.FlowCardAction('dashboard')
-      .register()
+    this.homey.flow.getActionCard('dashboard')
       .registerRunListener(args => args.device.showDashboard());
 
-    new Homey.FlowCardAction('application')
-      .register()
+    this.homey.flow.getActionCard('application')
       .registerRunListener(args => args.device.startApplication(args.pkg));
 
-    new Homey.FlowCardAction('loadUrl')
-      .register()
+    this.homey.flow.getActionCard('loadUrl')
       .registerRunListener(args => args.device.loadUrl(args.url));
 
-    new Homey.FlowCardAction('showImage')
-      .register()
+    this.homey.flow.getActionCard('showImage')
       .registerRunListener(args => args.device.showImage(args.color, args.droptoken));
 
   }

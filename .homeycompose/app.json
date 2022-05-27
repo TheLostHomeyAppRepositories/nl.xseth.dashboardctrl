@@ -1,0 +1,46 @@
+{
+  "id": "nl.xseth.dashboardctrl",
+  "sdk": 3,
+  "brandColor": "#1200F0",
+  "name": {
+    "en": "Dashboard Controller",
+    "nl": "Dashboard Controller"
+  },
+  "tags": {
+    "en": [
+      "dashboard",
+      "fully"
+    ],
+    "nl": [
+      "dashboard",
+      "fully"
+    ]
+  },
+  "version": "0.2.2",
+  "compatibility": ">=5.0.0",
+  "author": {
+    "name": "Roy K",
+    "website": "https://github.com/rkokkelk/nl.xseth.dashboardctrl"
+  },
+  "bugs": {
+    "url": "https://github.com/rkokkelk/nl.xseth.dashboardctrl/issues"
+  },
+  "homeyCommunityTopicId": 35761,
+  "source": "https://github.com/rkokkelk/nl.xseth.dashboardctrl",
+  "homepage": "https://community.athom.com/t/35761",
+  "images": {
+    "large": "./assets/images/large.png",
+    "small": "./assets/images/small.png"
+  },
+  "category": "tools",
+  "description": {
+    "en": "Control your Android dashboards using Homey",
+    "nl": "Bedien je Android dashboards via Homey"
+  },
+  "dependencies": {
+    "net": "*"
+  },
+  "platforms": [
+    "local"
+  ]
+}
