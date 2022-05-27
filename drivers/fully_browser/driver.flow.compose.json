@@ -7,24 +7,13 @@
         "nl": "Toon dashboard"
       },
       "titleFormatted": {
-        "en": "Show dashboard on [[device]]",
-        "nl": "Toon dashboard op [[device]]"
+        "en": "Show dashboard",
+        "nl": "Toon dashboard"
       },
       "hint": {
         "en": "Show the dashboard on your device",
         "nl": "Toon de dashboard op je apparaat"
-      },
-      "args": [
-        {
-          "name": "device",
-          "type": "device",
-          "placeholder": {
-            "en": "Select Fully Browser",
-            "nl": "Selecteer Fully Browser"
-          },
-          "filter": "driver_id=fully_browser"
-        }
-      ]
+      }
     },
     {
       "id": "application",
@@ -33,8 +22,8 @@
         "nl": "Start application"
       },
       "titleFormatted": {
-        "en": "Start [[pkg]] application on [[device]]",
-        "nl": "Start [[pkg]] applicatie op [[device]]"
+        "en": "Start [[pkg]] application",
+        "nl": "Start [[pkg]] applicatie"
       },
       "hint": {
         "en": "Start an Android application on your device",
@@ -48,15 +37,6 @@
             "en": "Enter android application ID",
             "nl": "Voer android applicatie ID op"
           }
-        },
-        {
-          "name": "device",
-          "type": "device",
-          "placeholder": {
-            "en": "Select Fully Browser",
-            "nl": "Selecteer Fully Browser"
-          },
-          "filter": "driver_id=fully_browser"
         }
       ]
     },
@@ -67,8 +47,8 @@
         "nl": "Laad URL"
       },
       "titleFormatted": {
-        "en": "Load URL [[url]] on [[device]]",
-        "nl": "Laad URL [[url]] op [[device]]"
+        "en": "Load URL [[url]]",
+        "nl": "Laad URL [[url]]"
       },
       "hint": {
         "en": "Load an URL on your device",
@@ -82,15 +62,6 @@
             "en": "Enter URL to load",
             "nl": "Geef URL op om te laden"
           }
-        },
-        {
-          "name": "device",
-          "type": "device",
-          "placeholder": {
-            "en": "Select Fully Browser",
-            "nl": "Selecteer Fully Browser"
-          },
-          "filter": "driver_id=fully_browser"
         }
       ]
     },
@@ -102,8 +73,8 @@
         "nl": "Toon afbeelding"
       },
       "titleFormatted": {
-        "en": "Show [[droptoken]] with backgroundcolor [[color]] on [[device]]",
-        "nl": "Toon [[droptoken]] met achtergrondkleur [[color]] op [[device]]"
+        "en": "Show [[droptoken]] with backgroundcolor [[color]]",
+        "nl": "Toon [[droptoken]] met achtergrondkleur [[color]]"
       },
       "hint": {
         "en": "Show an image on your device",
@@ -113,15 +84,6 @@
         {
           "type": "color",
           "name": "color"
-        },
-        {
-          "name": "device",
-          "type": "device",
-          "placeholder": {
-            "en": "Select Fully Browser",
-            "nl": "Selecteer Fully Browser"
-          },
-          "filter": "driver_id=fully_browser"
         }
       ]
     }
