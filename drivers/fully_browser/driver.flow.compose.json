@@ -1,0 +1,130 @@
+
+    {
+    "actions": [
+      {
+        "id": "dashboard",
+        "title": {
+          "en": "Show dashboard",
+          "nl": "Toon dashboard"
+        },
+        "titleFormatted": {
+          "en": "Show dashboard on [[device]]",
+          "nl": "Toon dashboard op [[device]]"
+        },
+        "hint": {
+          "en": "Show the dashboard on your device",
+          "nl": "Toon de dashboard op je apparaat"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "placeholder": {
+              "en": "Select Fully Browser",
+              "nl": "Selecteer Fully Browser"
+            },
+            "filter": "driver_id=fully_browser"
+          }
+        ]
+      },
+      {
+        "id": "application",
+        "title": {
+          "en": "Start application",
+          "nl": "Start application"
+        },
+        "titleFormatted": {
+          "en": "Start [[pkg]] application on [[device]]",
+          "nl": "Start [[pkg]] applicatie op [[device]]"
+        },
+        "hint": {
+          "en": "Start an Android application on your device",
+          "nl": "Start een Android applicatie op je apparaat"
+        },
+        "args": [
+          {
+            "name": "pkg",
+            "type": "text",
+            "placeholder": {
+              "en": "Enter android application ID",
+              "nl": "Voer android applicatie ID op"
+            }
+          },
+          {
+            "name": "device",
+            "type": "device",
+            "placeholder": {
+              "en": "Select Fully Browser",
+              "nl": "Selecteer Fully Browser"
+            },
+            "filter": "driver_id=fully_browser"
+          }
+        ]
+      },
+      {
+        "id": "loadUrl",
+        "title": {
+          "en": "Load URL",
+          "nl": "Laad URL"
+        },
+        "titleFormatted": {
+          "en": "Load URL [[url]] on [[device]]",
+          "nl": "Laad URL [[url]] op [[device]]"
+        },
+        "hint": {
+          "en": "Load an URL on your device",
+          "nl": "Laad een URL op je apparaat"
+        },
+        "args": [
+          {
+            "name": "url",
+            "type": "text",
+            "placeholder": {
+              "en": "Enter URL to load",
+              "nl": "Geef URL op om te laden"
+            }
+          },
+          {
+            "name": "device",
+            "type": "device",
+            "placeholder": {
+              "en": "Select Fully Browser",
+              "nl": "Selecteer Fully Browser"
+            },
+            "filter": "driver_id=fully_browser"
+          }
+        ]
+      },
+      {
+        "id": "showImage",
+        "droptoken": "image",
+        "title": {
+          "en": "Show image",
+          "nl": "Toon afbeelding"
+        },
+        "titleFormatted": {
+          "en": "Show [[droptoken]] with backgroundcolor [[color]] on [[device]]",
+          "nl": "Toon [[droptoken]] met achtergrondkleur [[color]] op [[device]]"
+        },
+        "hint": {
+          "en": "Show an image on your device",
+          "nl": "Toon een afbeelding op je apparaat"
+        },
+        "args": [
+          {
+            "type": "color",
+            "name": "color"
+          },
+          {
+            "name": "device",
+            "type": "device",
+            "placeholder": {
+              "en": "Select Fully Browser",
+              "nl": "Selecteer Fully Browser"
+            },
+            "filter": "driver_id=fully_browser"
+          }
+        ]
+      }
+    ]
+  }
