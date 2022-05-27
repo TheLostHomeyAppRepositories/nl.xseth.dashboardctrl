@@ -5,8 +5,8 @@ require('url');
 const nutil = require('util');
 const Homey = require('homey');
 const fetch = require('node-fetch');
-const util = require('/lib/util.js');
-const template = require('/lib/template.js');
+const util = require('../lib/util.js');
+const template = require('../lib/template.js');
 
 const { ManagerCloud } = require('homey');
 
@@ -16,7 +16,7 @@ class FullyBrowserDevice extends Homey.Device {
     const settings = this.getSettings();
 
     // Verify URL and autofix if possible
-    if(!util.validURL(settings.address)){
+    if (!util.validURL(settings.address)) {
       settings.address = util.fixURL(settings.address);
       this.setSettings(settings);
       this.log(`Autofixing URL to: ${settings.address}`)
@@ -28,7 +28,7 @@ class FullyBrowserDevice extends Homey.Device {
     this.API = api;
 
     // Setup polling of device
-    this.polling = setInterval(this.poll.bind(this), 1000 * settings.polling);
+    this.polling = this.homey.setInterval(this.poll.bind(this), 1000 * settings.polling);
 
     // Register image from CamSnapshot
     this.setupImage();
@@ -53,7 +53,7 @@ class FullyBrowserDevice extends Homey.Device {
     const URL = this.API;
     URL.searchParams.set('cmd', cmd);
 
-    this.log('Executing cmd=['+cmd+']');
+    this.log('Executing cmd=[' + cmd + ']');
 
     // cleanup old parameters
     URL.searchParams.delete('url');
@@ -94,7 +94,7 @@ class FullyBrowserDevice extends Homey.Device {
     const deviceProperties = {
       screenOn: 'onoff',
       screenBrightness: 'dim',
-      batteryLevel: 'measure_battery',
+      batteryLevel: 'measure_battery'
     }
 
     this.getStatus()
@@ -141,15 +141,15 @@ class FullyBrowserDevice extends Homey.Device {
     clearInterval(this.polling);
     clearInterval(this.pinging);
 
-    this.pinging = setInterval(() => {
+    this.pinging = this.homey.setInterval(() => {
       self.getStatus()
         .then(result => {
           self.log('Device reachable again, setting available, start polling again');
           self.setAvailable()
           clearInterval(self.pinging);
-          self.polling = setInterval(self.poll.bind(self), 1000 * self.getSettings().polling);
+          self.polling = this.homey.setInterval(self.poll.bind(self), 1000 * self.getSettings().polling);
         })
-        .catch(error => {
+        .catch(_error => {
           self.log('Device is not reachable, pinging every 63 seconds to see if it comes online again.');
         })
     }, 63000);
@@ -270,7 +270,7 @@ class FullyBrowserDevice extends Homey.Device {
     const server = util.startServer(onRequest);
 
     server.on('listening', function() {
-      const port = server.address()['port'];
+      const port = server.address().port;
 
       // Generate URL for Fully to connect to
       const IP = local.split(':')[0];
