@@ -12,7 +12,7 @@ const { ManagerCloud } = require('homey');
 
 class FullyBrowserDevice extends Homey.Device {
 
-  onInit() {
+  async onInit() {
     const settings = this.getSettings();
 
     // Verify URL and autofix if possible
@@ -36,6 +36,21 @@ class FullyBrowserDevice extends Homey.Device {
     // Register capabilities
     this.registerCapabilityListener('onoff', this.turnOnOff.bind(this));
     this.registerCapabilityListener('dim', this.changeBrightness.bind(this));
+  }
+
+  async setupImage() {
+    /**
+     * Register snapshot image from FullyBrowser
+     */
+
+    const snapshot = await this.homey.images.createImage();
+
+    snapshot.setStream(async stream => {
+      const res = await fetch(this.getAPIUrl('getCamshot'));
+      util.checkStatus(res);
+
+      return res.body.pipe(stream);
+    });
   }
 
   onDeleted() {
@@ -62,27 +77,6 @@ class FullyBrowserDevice extends Homey.Device {
     URL.searchParams.delete('package');
 
     return URL;
-  }
-
-  setupImage() {
-    /**
-     * Register snapshot image from FullyBrowser
-     */
-
-    this.snapshot = new Homey.Image();
-
-    this.snapshot.setStream(async stream => {
-      const res = await fetch(this.getAPIUrl('getCamshot'));
-      util.checkStatus(res);
-
-      return res.body.pipe(stream);
-    });
-
-    this.snapshot.register()
-      .then(() => {
-        return this.setCameraImage('fully_browser', Homey.__('Live CamSnapshot'), this.snapshot);
-      })
-      .catch(this.error.bind(this, 'snapshot.register'));
   }
 
   poll() {
@@ -118,11 +112,11 @@ class FullyBrowserDevice extends Homey.Device {
         switch (error) {
           case 'err_sensor_motion':
           case 'err_sensor_battery':
-            this.setUnavailable(Homey.__(error));
+            this.setUnavailable(this.homey.__(error));
             this.log(error);
             break;
           default:
-            this.setUnavailable(Homey.__('Unreachable'));
+            this.setUnavailable(this.homey.__('Unreachable'));
             this.log(error);
             break;
         }
