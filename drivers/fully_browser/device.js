@@ -5,8 +5,8 @@ require('url');
 const nutil = require('util');
 const Homey = require('homey');
 const fetch = require('node-fetch');
-const util = require('../lib/util.js');
-const template = require('../lib/template.js');
+const util = require('../../lib/util.js');
+const template = require('../../lib/template.js');
 
 const { ManagerCloud } = require('homey');
 

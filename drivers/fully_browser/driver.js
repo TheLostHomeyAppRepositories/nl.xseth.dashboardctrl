@@ -2,7 +2,7 @@
 
 const Homey = require('homey');
 const fetch = require('node-fetch');
-const util = require('../lib/util.js');
+const util = require('../../lib/util.js');
 
 class FullyBrowserDriver extends Homey.Driver {
 
