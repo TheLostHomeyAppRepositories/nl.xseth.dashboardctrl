@@ -1,5 +1,8 @@
 {
   "0.2.1": {
     "en": "Improve action card titles"
+  },
+  "0.3.0": {
+    "en": "Changed to Homey SDK v3"
   }
 }
