@@ -4,5 +4,8 @@
   },
   "0.3.0": {
     "en": "Changed to Homey SDK v3"
+  },
+  "0.3.1": {
+    "en": "Fixes issue with showing images"
   }
 }
