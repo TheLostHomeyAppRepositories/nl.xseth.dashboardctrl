@@ -4,6 +4,7 @@
   "description": "Homey app for dashboard controller",
   "main": "app.js",
   "dependencies": {
+    "homey-log": "^2.1.0",
     "node-fetch": "^2.6.1",
     "tmp": "^0.2.1"
   },
