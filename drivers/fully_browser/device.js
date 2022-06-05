@@ -8,8 +8,6 @@ const fetch = require('node-fetch');
 const util = require('../../lib/util.js');
 const template = require('../../lib/template.js');
 
-const { ManagerCloud } = require('homey');
-
 class FullyBrowserDevice extends Homey.Device {
 
   async onInit() {
@@ -262,8 +260,8 @@ class FullyBrowserDevice extends Homey.Device {
     };
 
     // Start HTTP server
-    const local = await ManagerCloud.getLocalAddress();
-    const server = util.startServer(onRequest);
+    const local = await this.homey.cloud.getLocalAddress();
+    const server = util.startServer(this.homey, onRequest);
 
     server.on('listening', function() {
       const port = server.address().port;
