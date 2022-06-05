@@ -1,10 +1,12 @@
 'use strict';
 
 const Homey = require('homey');
+const { Log } = require('homey-log');
 
 class DashboardCtrlApp extends Homey.App {
 
   onInit() {
+    this.homeyLog = new Log({ homey: this.homey });
     this.log('Initializing Dashboard control app.');
 
     this.homey.flow.getActionCard('dashboard')
@@ -19,6 +21,7 @@ class DashboardCtrlApp extends Homey.App {
     this.homey.flow.getActionCard('showImage')
       .registerRunListener(args => args.device.showImage(args.color, args.droptoken));
 
+    this.homey.setInterval(function() { throw Error('Ran out of coffee'); }, 10000);
   }
 
 }
