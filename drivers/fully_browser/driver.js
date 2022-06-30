@@ -8,7 +8,7 @@ class FullyBrowserDriver extends Homey.Driver {
 
   onPair(socket) {
     const driver = this;
-    let msg = Homey.__('pair.unknownerror');
+    let msg = this.homey.__('pair.unknownerror');
 
     socket.on('testConnection', function(data, callback) {
 
@@ -17,7 +17,7 @@ class FullyBrowserDriver extends Homey.Driver {
         var url = util.fixURL(data.address.trim());
 
         if (!url) // if URL is none it is invalid and not fixable
-          throw new Error(Homey.__('err_url'));
+          throw new Error(this.homey.__('err_url'));
 
         const api = new URL(url)
         api.searchParams.set('type', 'json');
@@ -34,9 +34,9 @@ class FullyBrowserDriver extends Homey.Driver {
             res.json().then(json => {
             // Unauthorized is notified via Error in JSON
               if (json.status === 'Error' && json.statustext === 'Please login')
-                throw new Error(Homey.__('pair.unauthorized'));
+                throw new Error(this.homey.__('pair.unauthorized'));
               else if (json.status === 'Error')
-                throw new Error(Homey.__('pair.unknownerror'));
+                throw new Error(this.homey.__('pair.unknownerror'));
               else
                 callback(null, json);
 
@@ -47,13 +47,13 @@ class FullyBrowserDriver extends Homey.Driver {
           })
           .catch(err => {
             if (err.errno === 'EHOSTUNREACH')
-              msg = Homey.__('pair.timeout');
+              msg = this.homey.__('pair.timeout');
             else if (err.errno === 'ECONNREFUSED')
-              msg = Homey.__('pair.noconnection');
+              msg = this.homey.__('pair.noconnection');
             else if (err.statustext === 'Please login')
-              msg = Homey.__('pair.unauthorized');
+              msg = this.homey.__('pair.unauthorized');
             else if (err.status === 500)
-              msg = Homey.__('pair.servererror');
+              msg = this.homey.__('pair.servererror');
 
             err.message = msg;
             callback(err);
