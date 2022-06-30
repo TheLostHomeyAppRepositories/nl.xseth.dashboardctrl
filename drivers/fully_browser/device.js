@@ -225,7 +225,7 @@ class FullyBrowserDevice extends Homey.Device {
      * Load start Url
      */
     const url = this.getAPIUrl('startApplication');
-    url.searchParams.set('package', pkg);
+    url.searchParams.set('package', pkg.trim());
 
     const res = await fetch(url);
     util.checkStatus(res);
