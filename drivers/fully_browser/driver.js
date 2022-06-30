@@ -6,18 +6,18 @@ const util = require('../../lib/util.js');
 
 class FullyBrowserDriver extends Homey.Driver {
 
-  onPair(socket) {
-    const driver = this;
+
+  async onPair(session) {
     let msg = this.homey.__('pair.unknownerror');
+    const driver = this;
 
-    socket.on('testConnection', function(data, callback) {
-
+    session.setHandler('testConnection', async function(data) {
       try {
         // Validate URL and fix it
         var url = util.fixURL(data.address.trim());
 
         if (!url) // if URL is none it is invalid and not fixable
-          throw new Error(this.homey.__('err_url'));
+          throw new Error(driver.homey.__('err_url'));
 
         const api = new URL(url)
         api.searchParams.set('type', 'json');
@@ -25,42 +25,32 @@ class FullyBrowserDriver extends Homey.Driver {
         api.searchParams.set('password', data.password);
         driver.log('Fetching info from: ' + api.toString())
 
-        fetch(api)
-          .then(res => {
-            if (!res.ok)
-              throw new Error(res);
+        const response = await fetch(api)
+        const json = await response.json()
 
-            // Parse JSON response
-            res.json().then(json => {
-            // Unauthorized is notified via Error in JSON
-              if (json.status === 'Error' && json.statustext === 'Please login')
-                throw new Error(this.homey.__('pair.unauthorized'));
-              else if (json.status === 'Error')
-                throw new Error(this.homey.__('pair.unknownerror'));
-              else
-                callback(null, json);
+        // Unauthorized is notified via Error in JSON
+        if (json.status === 'Error' && json.statustext === 'Please login')
+          throw new Error(driver.homey.__('pair.unauthorized'));
+        else if (json.status === 'Error')
+          throw new Error(driver.homey.__('pair.unknownerror'));
+        else
+          return json;
 
-            }).catch(err => {
-              driver.log(err);
-              callback(err);
-            });
-          })
-          .catch(err => {
-            if (err.errno === 'EHOSTUNREACH')
-              msg = this.homey.__('pair.timeout');
-            else if (err.errno === 'ECONNREFUSED')
-              msg = this.homey.__('pair.noconnection');
-            else if (err.statustext === 'Please login')
-              msg = this.homey.__('pair.unauthorized');
-            else if (err.status === 500)
-              msg = this.homey.__('pair.servererror');
-
-            err.message = msg;
-            callback(err);
-          });
       } catch (err) {
+
+        if (err.errno === 'EHOSTUNREACH')
+          msg = driver.homey.__('pair.timeout');
+        else if (err.errno === 'ECONNREFUSED')
+          msg = driver.homey.__('pair.noconnection');
+        else if (err.statustext === 'Please login')
+          msg = driver.homey.__('pair.unauthorized');
+        else if (err.status === 500)
+          msg = driver.homey.__('pair.servererror');
+        else
+          msg = err.message || err.toString();
+
         driver.log(err);
-        callback(err);
+        return msg;
       }
     });
   }
