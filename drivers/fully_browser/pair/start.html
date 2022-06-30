@@ -22,25 +22,25 @@
                   password : inputpassword
                 };
 
-              Homey.emit('testConnection', device_data, function(err, result){
-                  if(!err) {
-                      stats = result;
+              Homey.emit('testConnection', device_data).then(function(result){
+                // If string then error message, otherwise JSON object if succesful
+                if(typeof result === 'string'){
+                  $('.fully-error').show();
+                  $('.fully-error-msg').html(result);
 
-                      $('.fully-test').show();
-                      $('.fully-test-msg').html( __('pair.testing', stats));
-                      $('#connect').prop('disabled', false);
+                } else {
+                  stats = result;
 
-                    } else {
-                        $('.fully-error').show();
-                        $('.fully-error-msg').html(err);
-                      }
-                });
+                  $('.fully-test').show();
+                  $('.fully-test-msg').html( __('pair.testing', stats));
+                  $('#connect').prop('disabled', false);
+                }
+              });
 
             } else {
-                $('.fully-error').show();
-                $('.fully-error-msg').html( __('pair.nosettings') );
-              }
-
+              $('.fully-error').show();
+              $('.fully-error-msg').html( __('pair.nosettings') );
+            }
         });
 
       $('#connect').click(function() {
