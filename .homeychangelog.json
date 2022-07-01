@@ -10,5 +10,8 @@
   },
   "0.3.2": {
     "en": "Small bugfixes"
+  },
+  "0.3.3": {
+    "en": "Remove debug code"
   }
 }
