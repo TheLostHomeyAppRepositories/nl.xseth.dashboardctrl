@@ -54,8 +54,8 @@ class FullyBrowserDevice extends Homey.Device {
   }
 
   onDeleted() {
-    clearInterval(this.polling);
-    clearInterval(this.pinning);
+    this.homey.clearInterval(this.polling);
+    this.homey.clearInterval(this.pinning);
   }
 
   getAPIUrl(cmd) {
@@ -132,15 +132,15 @@ class FullyBrowserDevice extends Homey.Device {
 
     this.log('Device is not reachable, pinging every 63 seconds to see if it comes online again.');
 
-    clearInterval(this.polling);
-    clearInterval(this.pinging);
+    this.homey.clearInterval(this.polling);
+    this.homey.clearInterval(this.pinging);
 
     this.pinging = this.homey.setInterval(() => {
       self.getStatus()
         .then(result => {
           self.log('Device reachable again, setting available, start polling again');
           self.setAvailable()
-          clearInterval(self.pinging);
+          this.homey.clearInterval(self.pinging);
           self.polling = this.homey.setInterval(self.poll.bind(self), 1000 * self.getSettings().polling);
         })
         .catch(_error => {
